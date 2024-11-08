@@ -1,0 +1,54 @@
+.navbar-logo {
+  height: 20px; /* Adjust size as needed */
+  object-fit: contain;
+}
+
+@media (max-width: 991px) {
+  /* Adjust breakpoint as needed */
+  .navbar {
+    width: 100%;
+  }
+  #navbarNav {
+    background-color: #2c5279;
+    width: 100%; /* Ensures the collapse content takes full width */
+  }
+  .col-log-register {
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+  }
+}
+
+.col-log-register {
+  display: flex;
+  flex-direction: row;
+}
+/* Styles for Header dropdown */
+.navbar .nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.navbar .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%; /* Position the dropdown below the button */
+  left: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 1000;
+}
+
+.dropdown-item {
+  padding: 8px 16px;
+  color: #333;
+  text-decoration: none;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+  color: #007bff;
+}
