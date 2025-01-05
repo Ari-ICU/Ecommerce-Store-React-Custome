@@ -22,9 +22,10 @@ const ProductDetails = ({ addToWishlist, addToCart, wishlist, cart }) => {
             })
             .then((response) => response.json())
             .then((data) => {
-                // Filter out the main product from related products
+
                 const filteredRelatedProducts = data.filter((item) => item.id !== parseInt(id));
                 setRelatedProducts(filteredRelatedProducts);
+                window.scrollTo(0, 0);
             })
             .catch((error) => {
                 console.error('Error fetching product details or related products:', error);
@@ -39,7 +40,7 @@ const ProductDetails = ({ addToWishlist, addToCart, wishlist, cart }) => {
         <div className="container mt-4">
             <div className="mb-3">
                 <button
-                    onClick={() => navigate(-1)} // Navigate back to the previous page
+                    onClick={() => navigate(-1)}
                     className="btn btn-secondary"
                 >
                     <i className="fas fa-arrow-left me-2"></i> {/* Font Awesome left arrow icon */}
@@ -48,6 +49,7 @@ const ProductDetails = ({ addToWishlist, addToCart, wishlist, cart }) => {
             </div>
             <div className="row">
                 <div className="col-md-6">
+
                     <img src={product.image} alt={product.title} className="img-fluid" style={{ height: '400px', width: "400px", objectFit: 'contain' }} />
                 </div>
                 <div className="col-md-6">
@@ -55,6 +57,7 @@ const ProductDetails = ({ addToWishlist, addToCart, wishlist, cart }) => {
                     <p>{product.description}</p>
                     <p><strong>Price:</strong> ${product.price}</p>
                     <p><strong>Category:</strong> {product.category}</p>
+
                     {/* Add to Cart Button or Wishlist Button here */}
                     <button
                         className="btn btn-outline-warning me-2"
@@ -82,12 +85,14 @@ const ProductDetails = ({ addToWishlist, addToCart, wishlist, cart }) => {
                         relatedProducts.map((relatedProduct) => (
                             <div className="col-md-4 mb-4" key={relatedProduct.id}>
                                 <div className="card h-100">
-                                    <img
-                                        src={relatedProduct.image}
-                                        className="card-img-top"
-                                        alt={relatedProduct.title}
-                                        style={{ height: '200px', objectFit: 'contain' }}
-                                    />
+                                    <Link to={`/product/${relatedProduct.id}`}>
+                                        <img
+                                            src={relatedProduct.image}
+                                            className="card-img-top"
+                                            alt={relatedProduct.title}
+                                            style={{ height: '200px', objectFit: 'contain' }}
+                                        />
+                                    </Link>
                                     <div className="card-body">
                                         <h5 className="card-title">{relatedProduct.title}</h5>
                                         <p className="card-text">${relatedProduct.price}</p>

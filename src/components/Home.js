@@ -1,4 +1,3 @@
-// Home.js
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import "./Home.css"
@@ -11,7 +10,8 @@ const Home = ({ addToWishlist, addToCart, wishlist, cart }) => {
         fetch('https://fakestoreapi.com/products')
             .then((response) => response.json())
             .then((data) => {
-                setProducts(data);
+                const filteredProducts = data.filter(product => product.category !== "electronics" && product.category !== "jewelery");
+                setProducts(filteredProducts);
                 setLoading(false);
             })
             .catch((error) => {
@@ -25,19 +25,18 @@ const Home = ({ addToWishlist, addToCart, wishlist, cart }) => {
     }
 
     // Slice the products array to show only the first 8 products
-    const displayedProducts = products.slice(0, 8);
+    // const displayedProducts = products.slice(0, 8);
 
     return (
         <div className="">
             <header className="text-center d-flex justify-content-center align-items-center mb-5 custom-background">
                 <div className="row w-100 m-4">
                     <div
-                        className="col-12 col-md-6 d-flex text-black flex-column justify-content-center align-items-center "
+                        className="col-12 col-md-6 d-flex text-black flex-column justify-content-center align-items-center order-1 order-md-0 "
 
                     >
-                        <h1>Welcome to ZENDO</h1>
-                        <p>Your one-stop shop for original clothing in Cambodia.</p>
-                        <p>Explore our exclusive collections from various brands!</p>
+                        <h1 className=''>Welcome to ZENDO</h1>
+                        <p>Your one-stop shop for original clothing in Cambodia.<br /> <span>Explore our exclusive collections from various brands!</span></p>
                         <div className="">
                             <Link to={`/product`} className="btn btn-btn btn-success">
                                 Shop Now
@@ -45,7 +44,7 @@ const Home = ({ addToWishlist, addToCart, wishlist, cart }) => {
                         </div>
                     </div>
 
-                    <div className="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center p-3">
+                    <div className="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center p-3 order-0 order-md-1">
                         <img
                             src={img}
                             alt="img"
@@ -56,24 +55,23 @@ const Home = ({ addToWishlist, addToCart, wishlist, cart }) => {
                 </div>
             </header>
 
-
-
-
             <div className='container'>
-                <div className="row mt-4 border border-black p-3">
-                    <h2 className='text-center text-uppercase text-decoration-underline'>Featured Products</h2>
-                    {displayedProducts.length > 0 ? (
-                        displayedProducts.map((product) => (
+                <div className="row mt-4  p-3">
+                    <h2 className='text-center text-uppercase border-2 border-bottom border-primary p-2'>Featured Products</h2>
+                    {products.length > 0 ? (
+                        products.slice(0, 8).map((product) => (
                             <div className="col-lg-3 col-md-6 mb-4 mt-4 p-2 " key={product.id}>
                                 <div className="card h-100">
-                                    <img
-                                        src={product.image}
-                                        className="card-img-top"
-                                        alt={product.title}
-                                        style={{ height: '200px', objectFit: 'contain' }}
-                                    />
+                                    <Link to={`/product/${product.id}`}>
+                                        <img
+                                            src={product.image}
+                                            className="card-img-top"
+                                            alt={product.title}
+                                            style={{ height: '200px', objectFit: 'contain' }}
+                                        />
+                                    </Link>
                                     <div className="card-body d-flex flex-column">
-                                        <h5 className="card-title">{product.title}</h5>
+                                        <h5 className="card-title text-danger">{product.title}</h5>
                                         <p className="card-text">${product.price}</p>
                                         <div className="mt-auto">
                                             <Link to={`/product/${product.id}`} className="btn btn-primary me-2">

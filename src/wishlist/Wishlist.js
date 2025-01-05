@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 
 const Wishlist = ({ wishlist, removeFromWishlist }) => {
     return (
@@ -12,12 +12,14 @@ const Wishlist = ({ wishlist, removeFromWishlist }) => {
                     {wishlist.map((item) => (
                         <div className="col-12 col-sm-6 col-md-3 mb-4" key={item.id}>
                             <div className="card h-100">
-                                <img
-                                    src={item.image}
-                                    className="card-img-top"
-                                    alt={item.title}
-                                    style={{ height: '200px', objectFit: 'contain' }}
-                                />
+                                <Link to={`/product/${item.id}`}>
+                                    <img
+                                        src={item.image}
+                                        className="card-img-top"
+                                        alt={item.title}
+                                        style={{ height: '200px', objectFit: 'contain' }}
+                                    />
+                                </Link>
                                 <div className="card-body d-flex flex-column">
                                     <h5 className="card-title">{item.title}</h5>
                                     <p className="card-text">${item.price}</p>

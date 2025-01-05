@@ -5,8 +5,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const CategoryPage = ({ addToWishlist, addToCart, wishlist, cart }) => {
     const { category } = useParams();
     const [products, setProducts] = useState([]);
-    const [sortField, setSortField] = useState('price');  // Field to sort by ('price' or 'title')
-    const [sortOrder, setSortOrder] = useState('asc');    // Sorting order ('asc' or 'desc')
+    const [loading, setLoading] = useState(true);
+    const [sortField, setSortField] = useState('price');
+    const [sortOrder, setSortOrder] = useState('asc');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [productsPerPage] = useState(12);
 
     useEffect(() => {
         const fetchCategoryProducts = async () => {
@@ -14,8 +17,10 @@ const CategoryPage = ({ addToWishlist, addToCart, wishlist, cart }) => {
                 const response = await fetch(`https://fakestoreapi.com/products/category/${category}`);
                 const data = await response.json();
                 setProducts(data);
+                setLoading(false);
             } catch (error) {
                 console.error('Error fetching products:', error);
+                setLoading(false);
             }
         };
 
@@ -36,20 +41,42 @@ const CategoryPage = ({ addToWishlist, addToCart, wishlist, cart }) => {
 
     // Handle sorting change
     const handleSortChange = (event) => {
-        const [field, order] = event.target.value.split('_');  // Example: "price_asc"
+        const [field, order] = event.target.value.split('_');
         setSortField(field);
         setSortOrder(order);
     };
 
+    // Get the products to display on the current page
+    const indexOfLastProduct = currentPage * productsPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+    const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+
+
+
+    // Handle page change and scroll to top
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        window.scrollTo(0, 0);
+    };
+
+    const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
+
+
+    if (loading) return <p className="container">Loading...</p>;
+
+
+
     return (
         <div className="container-md my-4">
             <div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
-                <h2 className="text-center mt-5 hover-underline">{category.charAt(0).toUpperCase() + category.slice(1)}</h2>
+                <h2 className="text-center mt-5 hover-underline">
+                    {category !== 'electronics' ? category.toUpperCase() : ''}
+                </h2>
                 {/* Sort Controls as Dropdown */}
                 <select
                     className="form-select w-auto"
                     onChange={handleSortChange}
-                    value={`${sortField}_${sortOrder}`}  // To reflect current sorting state
+                    value={`${sortField}_${sortOrder}`}
                 >
                     <option value="price_asc">Sort by Price: Low to High</option>
                     <option value="price_desc">Sort by Price: High to Low</option>
@@ -58,7 +85,7 @@ const CategoryPage = ({ addToWishlist, addToCart, wishlist, cart }) => {
                 </select>
             </div>
             <div className="row">
-                {products.map((product) => (
+                {currentProducts.map((product) => (
                     <div key={product.id} className="col-lg-3 col-md-4 col-sm-6 mb-4">
                         <div className="card h-100">
                             <img
@@ -97,6 +124,42 @@ const CategoryPage = ({ addToWishlist, addToCart, wishlist, cart }) => {
                     </div>
                 ))}
             </div>
+
+            {/* Pagination Controls */}
+            <nav aria-label="Page navigation example" className='d-flex justify-content-center'>
+                <ul className="pagination">
+                    <li className="page-item">
+                        <button
+                            className="page-link"
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                            aria-label="Previous"
+                        >
+                            <span aria-hidden="true">&laquo;</span>
+                        </button>
+                    </li>
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <li className="page-item" key={index + 1}>
+                            <button
+                                className={`page-link ${currentPage === index + 1 ? 'active' : ''}`}
+                                onClick={() => handlePageChange(index + 1)}
+                            >
+                                {index + 1}
+                            </button>
+                        </li>
+                    ))}
+                    <li className="page-item">
+                        <button
+                            className="page-link"
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                            aria-label="Next"
+                        >
+                            <span aria-hidden="true">&raquo;</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
         </div>
     );
 };

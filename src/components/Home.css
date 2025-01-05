@@ -11,6 +11,6 @@
   background-position: center;
   height: auto;
   position: relative;
-  filter: brightness(0.6); /* applies a filter to darken image slightly */
+  filter: brightness(0.6);
   background-attachment: fixed;
 }

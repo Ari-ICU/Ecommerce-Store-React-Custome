@@ -1,4 +1,3 @@
-// Footer.js
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -10,7 +9,7 @@ const Footer = () => {
         // Simulate a loading delay
         const timer = setTimeout(() => {
             setLoading(false);
-        }, 2000); // Adjust the time as needed
+        }, 2000);
 
         // Cleanup the timer
         return () => clearTimeout(timer);
